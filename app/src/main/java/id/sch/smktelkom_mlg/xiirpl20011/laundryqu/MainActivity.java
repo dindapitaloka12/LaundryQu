@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     EditText etNama, etTelp;
     TextView tvHasil;
     CheckBox cbb, cbt,cbs;
+    RadioGroup rgl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         cbb = (CheckBox) findViewById(R.id.checkBoxB);
         cbt = (CheckBox) findViewById(R.id.checkBoxT);
         cbs = (CheckBox) findViewById(R.id.checkBoxS);
+        rgl = (RadioGroup) findViewById(R.id.rg);
 
         findViewById(R.id.buttonP).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
         String nama = etNama.getText().toString();
         int telp = Integer.parseInt(etTelp.getText().toString());
         StringBuilder builder = new StringBuilder();
+        String hasil = null;
+        if (rgl.getCheckedRadioButtonId() != -1) {
+            RadioButton rb = (RadioButton) findViewById(rgl.getCheckedRadioButtonId());
+            hasil = rb.getText().toString();
+        }
         String laundry = "Laundry yang diplih \t\n";
         int startlen = laundry.length();
         if (cbt.isChecked()) laundry += "\t  " + cbt.getText() + "\n";
@@ -44,10 +53,15 @@ public class MainActivity extends AppCompatActivity {
         if (laundry.length() == startlen) {
             tvHasil.setText("Tidak ada laundry yang dipilih\n");
         } else {
-            builder.append("Nama : " + nama + "\n");
-            builder.append("Telp : " + telp + "\n");
-            builder.append("\n"+laundry);
-            tvHasil.setText(builder);
+            if (hasil == null) {
+                tvHasil.setText("Anda belum memilih Jenis Kelamin\n");
+            } else {
+                builder.append("Nama : " + nama + "\n");
+                builder.append("Telp : " + telp + "\n");
+                builder.append("Jenis Kelamin : " + hasil + "\n");
+                builder.append("\n" + laundry);
+                tvHasil.setText(builder);
+            }
         }
     }
 }
